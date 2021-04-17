@@ -52,21 +52,22 @@ const respondToClient = () => {
       'Let’s go see a film.',
       'Yes, that sounds like a good idea.',
     ];
-  
+  const aleatorio = Math.floor(Math.random * commonAnswers.length);
     //TODO: Completar esta función para que devuelva un string aleatorio del arreglo anterior
-  
+  return commonAnswers[aleatorio];
   };
   const webSocketServer = require('ws').Server;
  const wss = new webSocketServer({ port: 8081 });
+
 wss.on('connection', (ws: any) => {
 
-    ws.send('Hello Client');
-    
     console.log(ws._socket.remoteAddress); 
     console.log(ws._socket.remotePort); 
-
+    ws.send('Hello Client'); 
+    const clientId = `${ws._socket.remoteAddress}:${ws._socket.remotePort}`
     ws.on('message', (message: any) => {
       console.log(`[Client]: ${message}`);
+      ws.send(respondToClient());
     });
   
     ws.on('end', () => {
